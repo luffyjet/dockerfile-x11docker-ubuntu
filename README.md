@@ -1,13 +1,14 @@
-# x11docker/mate
+# Ubuntu MATE with x11docker
 
-Mate desktop in Docker image. Based on Debian
- - Run Mate desktop in Docker.
+Ubuntu MATE desktop in Docker image. Based on Ubuntu
+ - Run MATE desktop in Docker.
  - Use [x11docker](https://github.com/mviereck/x11docker) to run GUI applications and desktop environments in docker images. 
 
 
 # Command examples: 
- - Single application: `x11docker x11docker/mate caja`
- - Full desktop: `x11docker --desktop x11docker/mate`
+ - Build container for the first time: `docker build . -t ubuntu-mate`
+ - Single application: `x11docker ubuntu-mate caja`
+ - Full desktop: `x11docker --desktop ubuntu-mate`
 
 # Options:
  - Persistent home folder stored on host with   `--home`
@@ -27,10 +28,5 @@ To add your desired applications, create your own Dockerfile with this image as 
 ```
 FROM x11docker/mate
 RUN apt-get update
-RUN apt-get install -y firefox-esr
+RUN apt-get install -y meld
 ```
-
- # Screenshot
-![screenshot](https://raw.githubusercontent.com/mviereck/x11docker/screenshots/screenshot-mate.png "Mate desktop running in Xnest window using x11docker")
- 
-
