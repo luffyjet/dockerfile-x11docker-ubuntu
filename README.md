@@ -22,11 +22,3 @@ Ubuntu MATE desktop in Docker image. Based on Ubuntu
  - Webcam support with                          `--webcam`
 
 See `x11docker --help` for further options.
-
-# Extend base image
-To add your desired applications, create your own Dockerfile with this image as a base. Example:
-```
-FROM x11docker/mate
-RUN apt-get update
-RUN apt-get install -y meld
-```
