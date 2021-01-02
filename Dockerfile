@@ -1,12 +1,13 @@
-# x11docker/mate
+# x11docker with Ubuntu MATE
 # 
-# Run Mate desktop in docker. 
+# Run Ubuntu MATE desktop in docker. 
 # Use x11docker to run image. 
 # Get x11docker from github: 
 #   https://github.com/mviereck/x11docker 
 #
-# Examples: x11docker --desktop x11docker/mate
-#           x11docker x11docker/mate caja
+# Examples: docker build . -t ubuntu-mate
+#           x11docker --desktop ubuntu-mate
+#           x11docker ubuntu-mate caja
 #
 # Options:
 # Persistent home folder stored on host with   --home
@@ -21,7 +22,7 @@
 #
 # See x11docker --help for further options.
 
-FROM debian:buster
+FROM ubuntu:groovy
 
 RUN apt-get update && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -35,7 +36,7 @@ RUN apt-get update && \
       mime-support \
       desktop-file-utils && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      mesa-utils \
+      ubuntu-mate-desktop \
       mesa-utils-extra \
       libxv1
 
@@ -45,7 +46,7 @@ RUN apt-get update && \
 ENV LANG en_US.UTF-8
 RUN echo $LANG UTF-8 > /etc/locale.gen && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      locales && \
+      locales-all && \
     update-locale --reset LANG=$LANG
 
 # Mate desktop
@@ -56,7 +57,6 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommend
       mate-applets \
       mate-notification-daemon \
       mate-system-monitor \
-      mate-utils
+      mate-utils sudo
 
 CMD ["mate-session"]
-
