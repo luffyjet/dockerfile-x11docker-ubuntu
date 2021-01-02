@@ -34,11 +34,12 @@ RUN apt-get update && \
       xdg-user-dirs \
       menu-xdg \
       mime-support \
-      desktop-file-utils && \
+      desktop-file-utils \
+      bash-completion && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      ubuntu-mate-desktop \
       mesa-utils-extra \
-      libxv1
+      libxv1 \
+      sudo
 
 # Language/locale settings
 #   replace en_US by your desired locale setting, 
@@ -46,17 +47,11 @@ RUN apt-get update && \
 ENV LANG en_US.UTF-8
 RUN echo $LANG UTF-8 > /etc/locale.gen && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      locales-all && \
+     locales && \
     update-locale --reset LANG=$LANG
 
-# Mate desktop
-RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-      mate-desktop-environment-core && \
-    env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      fortunes \
-      mate-applets \
-      mate-notification-daemon \
-      mate-system-monitor \
-      mate-utils sudo
+# Ubuntu MATE desktop
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      ubuntu-mate-desktop
 
 CMD ["mate-session"]
