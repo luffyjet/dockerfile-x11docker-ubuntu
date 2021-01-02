@@ -22,3 +22,7 @@ Ubuntu MATE desktop in Docker image. Based on Ubuntu
  - Webcam support with                          `--webcam`
 
 See `x11docker --help` for further options.
+
+# Screenshot
+
+![Ubuntu MATE 20.10 inside Xephyr](https://ubuntu-mate.community/uploads/default/original/3X/8/a/8af0e5494e72f2d814943fc4509dc6542485c965.jpeg)
