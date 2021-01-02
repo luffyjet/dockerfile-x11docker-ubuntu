@@ -22,7 +22,8 @@
 #
 # See x11docker --help for further options.
 
-FROM ubuntu:groovy
+FROM ubuntu:focal
+ENV SHELL=/bin/bash
 
 RUN apt-get update && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
