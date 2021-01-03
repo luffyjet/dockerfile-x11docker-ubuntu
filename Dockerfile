@@ -21,8 +21,14 @@
 # Webcam support with                          --webcam
 #
 # See x11docker --help for further options.
+#
+#
+# Notes: 
+#    1. Ubuntu 16.04 LTS (xenial) and previous versions are not supported
+#    2. supported versions are Ubuntu 18.04 LTS (bionic), 20.04 LTS (focal), 20.10 (groovy) and upcoming 21.04 (hirsute).
 
-FROM ubuntu:focal
+ARG VER=focal
+FROM ubuntu:$VER
 ENV SHELL=/bin/bash
 
 RUN apt-get update && \
@@ -40,7 +46,8 @@ RUN apt-get update && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
       mesa-utils-extra \
       libxv1 \
-      sudo
+      sudo \
+      lsb-release
 
 # Language/locale settings
 #   replace en_US by your desired locale setting, 
@@ -54,5 +61,19 @@ RUN echo $LANG UTF-8 > /etc/locale.gen && \
 # Ubuntu MATE desktop
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
       ubuntu-mate-desktop
+
+# 20.10 specifics
+RUN if lsb_release -cs | grep -q "groovy"; then \
+    echo "Warning: it is groovy, will use workarounds!" && \    
+    env DEBIAN_FRONTEND=noninteractive sudo apt autopurge -y \
+      acpid acpi-support sssd-common; \
+    else true; fi
+
+# 21.04 specifics
+RUN if lsb_release -cs | grep -q "hirsute"; then \
+    echo "Warning: it is hirsute, will use workarounds!" && \
+        env DEBIAN_FRONTEND=noninteractive sudo apt autopurge -y \
+      acpid acpi-support redshift-gtk; \
+    else true; fi
 
 CMD ["mate-session"]

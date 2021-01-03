@@ -6,9 +6,9 @@ Ubuntu MATE desktop in Docker image. Based on Ubuntu
 
 
 # Command examples: 
- - Build container for the first time: `docker build . -t ubuntu-mate`
- - Single application: `x11docker ubuntu-mate caja`
- - Full desktop: `x11docker --desktop ubuntu-mate`
+ - Build container for the first time: `docker build . -t ubuntu-mate:focal`
+ - Single application: `x11docker ubuntu-mate:focal caja`
+ - Full desktop: `x11docker --desktop ubuntu-mate:focal`
 
 # Options:
  - Persistent home folder stored on host with   `--home`
@@ -25,4 +25,4 @@ See `x11docker --help` for further options.
 
 # Screenshot
 
-![Ubuntu MATE 20.10 inside Xephyr](https://ubuntu-mate.community/uploads/default/original/3X/8/a/8af0e5494e72f2d814943fc4509dc6542485c965.jpeg)
+![Ubuntu MATE 20.04 LTS inside Xephyr](https://ubuntu-mate.community/uploads/default/original/3X/0/b/0b59ab8454d5c40e59f02c5072b22ac172df8078.jpeg)
