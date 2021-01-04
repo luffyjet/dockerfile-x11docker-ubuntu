@@ -24,8 +24,8 @@
 #
 #
 # Notes: 
-#    1. Ubuntu 16.04 LTS (xenial) and previous versions are not supported
-#    2. supported versions are Ubuntu 18.04 LTS (bionic), 20.04 LTS (focal), 20.10 (groovy) and upcoming 21.04 (hirsute).
+#    1. Ubuntu 12.04 LTS (precise), 14.04 LTS (trusty), 16.04 LTS (xenial) can operate without systemd
+#    2. Ubuntu 18.04 LTS (bionic), 20.04 LTS (focal), 20.10 (groovy) and upcoming 21.04 (hirsute) are fully-functional while using systemd.
 
 ARG VER=focal
 FROM ubuntu:$VER
@@ -56,7 +56,35 @@ ENV LANG en_US.UTF-8
 RUN echo $LANG UTF-8 > /etc/locale.gen && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
      locales && \
-    update-locale --reset LANG=$LANG
+    lsb_release -cs | grep -qE "precise|trusty" && locale-gen $LANG || update-locale --reset LANG=$LANG
+
+RUN if lsb_release -cs | grep -qE "precise|xenial"; then \
+    echo "Notice: it is precise or xenial, need workaround for resolvconf." && \
+    echo "resolvconf resolvconf/linkify-resolvconf boolean false" | debconf-set-selections; \
+    else true; fi
+
+RUN if lsb_release -cs | grep -q "precise"; then \
+    echo "Notice: it is precise, need workarounds and PPAs." && \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y python-software-properties && \
+    env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/ppa && \
+    env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/precise-mate && \
+    env DEBIAN_FRONTEND=noninteractive apt-get update && \
+    env DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-mate-core; \
+    else true; fi
+
+RUN if lsb_release -cs | grep -q "trusty"; then \
+    echo "Notice: it is trusty, need workarounds and PPAs." && \    
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common && \
+    env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/ppa && \
+    env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/trusty-mate && \
+    env DEBIAN_FRONTEND=noninteractive apt-get update && \
+    env DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-mate-core; \
+    else true; fi
+
+
+
 
 # Ubuntu MATE desktop
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -75,5 +103,9 @@ RUN if lsb_release -cs | grep -q "hirsute"; then \
         env DEBIAN_FRONTEND=noninteractive sudo apt autopurge -y \
       acpid acpi-support redshift-gtk; \
     else true; fi
+
+# remove mate-screensaver
+RUN env DEBIAN_FRONTEND=noninteractive apt-get purge mate-screensaver -y
+RUN env DEBIAN_FRONTEND=noninteractive apt-get autoremove --purge -y
 
 CMD ["mate-session"]
