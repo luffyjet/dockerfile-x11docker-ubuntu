@@ -31,6 +31,8 @@ ARG VER=focal
 FROM ubuntu:$VER
 ENV SHELL=/bin/bash
 
+RUN bash -c 'if test -n "$http_proxy"; then echo "Acquire::http::proxy \"$http_proxy\";" > /etc/apt/apt.conf.d/99proxy; else echo "Using direct network connection."; fi'
+
 RUN apt-get update && \
     env DEBIAN_FRONTEND=noninteractive apt-get install -y \
       dbus-x11 \
