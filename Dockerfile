@@ -72,7 +72,7 @@ RUN if lsb_release -cs | grep -q "precise"; then \
     env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/precise-mate && \
     env DEBIAN_FRONTEND=noninteractive apt-get update && \
     env DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
-    env DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-mate-core; \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-mate-core --force-yes; \
     else true; fi
 
 RUN if lsb_release -cs | grep -q "trusty"; then \
@@ -81,16 +81,23 @@ RUN if lsb_release -cs | grep -q "trusty"; then \
     env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/ppa && \
     env DEBIAN_FRONTEND=noninteractive apt-add-repository -y ppa:ubuntu-mate-dev/trusty-mate && \
     env DEBIAN_FRONTEND=noninteractive apt-get update && \
-    env DEBIAN_FRONTEND=noninteractive apt-get upgrade -y && \
-    env DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-mate-core; \
+    env DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --force-yes && \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-mate-core --force-yes; \
     else true; fi
 
 
 
 
 # Ubuntu MATE desktop
-RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      ubuntu-mate-desktop
+# * package for 12.04 LTS and 14.04 LTS
+# * task for 16.04 LTS and newer versions
+RUN if lsb_release -cs | grep -qE "precise|trusty"; then \
+    env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      ubuntu-mate-desktop --force-yes; \
+    else \
+      env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      ubuntu-mate-desktop^; \
+    fi
 
 # 20.10 specifics
 RUN if lsb_release -cs | grep -q "groovy"; then \
