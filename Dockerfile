@@ -25,7 +25,7 @@
 #
 # Notes: 
 #    1. Ubuntu 12.04 LTS (precise), 14.04 LTS (trusty), 16.04 LTS (xenial) can operate without systemd
-#    2. Ubuntu 18.04 LTS (bionic), 20.04 LTS (focal), 20.10 (groovy) and upcoming 21.04 (hirsute) are fully-functional while using systemd.
+#    2. Ubuntu 18.04 LTS (bionic), 20.04 LTS (focal), 20.10 (groovy), 21.04 (hirsute), 21.10 (impish) and upcoming 22.04 LTS (jammy) are fully-functional while using systemd.
 
 ARG VER=focal
 FROM ubuntu:$VER
@@ -111,6 +111,20 @@ RUN if lsb_release -cs | grep -q "hirsute"; then \
     echo "Warning: it is hirsute, will use workarounds!" && \
         env DEBIAN_FRONTEND=noninteractive sudo apt autopurge -y \
       acpid acpi-support redshift-gtk; \
+    else true; fi
+
+# 21.10 specifics
+RUN if lsb_release -cs | grep -qE "impish"; then \
+    echo "Warning: it is impish, will use workarounds!" && \
+        env DEBIAN_FRONTEND=noninteractive sudo apt autopurge -y \
+      acpid acpi-support redshift-gtk; \
+    else true; fi
+
+# 22.04 LTS specifics
+RUN if lsb_release -cs | grep -qE "jammy"; then \
+    echo "Warning: it is jammy, will use workarounds!" && \
+        env DEBIAN_FRONTEND=noninteractive sudo apt autopurge -y \
+      acpid acpi-support; \
     else true; fi
 
 # remove mate-screensaver
