@@ -23,6 +23,9 @@
 # See x11docker --help for further options.
 
 FROM ubuntu:focal
+
+ADD sources.list /etc/apt/
+
 ENV SHELL=/bin/bash
 
 RUN apt-get update && \
@@ -51,8 +54,20 @@ RUN echo $LANG UTF-8 > /etc/locale.gen && \
      locales && \
     update-locale --reset LANG=$LANG
 
-# Ubuntu MATE desktop
+# 安装一些开发工具，不需要可以注释
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      ubuntu-mate-desktop
+      build-essential\
+      git\
+      unzip\ 
+      curl\ 
+      clang\ 
+      cmake\ 
+      pkg-config\
+      libwayland-dev\
+      weston
+
+# Ubuntu desktop, Mate: ubuntu-mate-desktop
+RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
+      ubuntu-desktop 
 
 CMD ["mate-session"]
