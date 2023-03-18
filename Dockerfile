@@ -68,6 +68,6 @@ RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 # Ubuntu desktop, Mate: ubuntu-mate-desktop
 RUN env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-      ubuntu-desktop 
+      ubuntu-mate-desktop 
 
 CMD ["mate-session"]

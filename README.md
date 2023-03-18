@@ -14,7 +14,8 @@
 
 4. 准备用来build arm64桌面系统的 dockerfile
 
-   [参考此处](https://github.com/N0rbert/dockerfile-x11docker-ubuntu-mate) ，这里我特意用的 Ubuntu20 ,  如需要更多的软件可以在dockerfile中添加 ，也可以安装其他Ubuntu桌面，参考[此处](https://www.makeuseof.com/install-desktop-environment-gui-ubuntu-server/)
+   [参考此处](https://github.com/N0rbert/dockerfile-x11docker-ubuntu-mate) ，这里我特意用的 Ubuntu20 ,  如需要更多的软件可以在dockerfile中添加 
+   
 ````dockerfile
 # x11docker with Ubuntu MATE
 FROM ubuntu:focal
